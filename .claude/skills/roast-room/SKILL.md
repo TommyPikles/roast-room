@@ -1,20 +1,20 @@
 ---
 name: roast-room
-description: Use when a founder wants a hard business decision debated by a council of world-class operators, says "roast room", "put this in the Roast Room", "founder council", "convene the council", "take this to the board", "what would Hormozi, Bezos, or Buffett say", "should I do X", or can't make up their mind on pricing, hiring, raising money, a new product, a partnership, a pivot, an event, or spending. Seven sub-agents, each built from one expert's public work (Bezos, Paul Graham, Hormozi, Gary Vaynerchuk, Dan Martell, Gino Wickman, Buffett), argue it over three rounds, then a Chair returns a scored verdict, the reasoning, the dissent, and next steps. Also does a one-seat consult ("ask the Hormozi seat"). Not /roast (generic personas, idea validation).
-argument-hint: "[the decision] [--quick] [--seats hormozi,buffett,...] | ask <seat> [question]"
+description: Use when a founder wants a hard business decision debated by a council of world-class operators, says "roast room", "put this in the Roast Room", "founder council", "convene the council", "take this to the board", "what would Hormozi or Bezos say", "should I do X", or can't make up their mind on pricing, hiring, raising money, a new product, a partnership, a pivot, an event, or spending. Two sub-agents, each built from one expert's public work (Jeff Bezos and Alex Hormozi), argue it over three rounds, then a Chair returns a scored verdict, the reasoning, the dissent, and next steps. Also does a one-seat consult ("ask the Hormozi seat"). Not /roast (generic personas, idea validation).
+argument-hint: "[the decision] [--quick] [--seats hormozi | --seats bezos] | ask <seat> [question]"
 ---
 
 ## What this does
 
-The Roast Room: runs a board meeting on one decision. Seven seats, one per business pillar, each a sub-agent that reasons and talks the way its expert does, grounded in a brain compiled from that person's videos, essays, letters, talks, and books as they teach them in public. The seats argue across three rounds: open, debate, vote. You act as the **Chair**: you never argue a side, you run the room, keep the score, and write the verdict.
+The Roast Room: runs a board meeting on one decision. Two seats, Bezos (strategy and decisions) and Hormozi (offers, pricing, and sales), each a sub-agent that reasons and talks the way its expert does, grounded in a brain compiled from that person's videos, essays, letters, talks, and books as they teach them in public. The seats argue across three rounds: open, debate, vote. You act as the **Chair**: you never argue a side, you run the room, keep the score, and write the verdict.
 
-Read once before the first run: `references/seats.md` (roster, weights, tensions), `references/round-prompts.md` (what each seat gets), `references/scoring.md` (math and overrides), `references/report-template.md` (output), `references/live-room.md` (the small JSON files the visual room plays). A finished example council lives in `sessions/2026-10-09-example-take-the-seed/`.
+Read once before the first run: `references/seats.md` (roster, weights, tensions), `references/round-prompts.md` (what each seat gets), `references/scoring.md` (math and overrides), `references/report-template.md` (output), `references/live-room.md` (the small JSON files the visual room plays).
 
 ## Modes
 
-- **Full council** (default): all seven seats, three rounds. For decisions that are expensive or hard to undo.
-- **Quick** (`--quick`): four seats chosen per `seats.md`, Rounds 1 and 2, Round 3 only if the scores did not converge. For reversible calls.
-- **Named seats** (`--seats a,b,c`): only those seats, three rounds.
+- **Full council** (default): both seats, three rounds. For decisions that are expensive or hard to undo.
+- **Quick** (`--quick`): both seats, Rounds 1 and 2, Round 3 only if the scores did not converge. For reversible calls.
+- **Named seats** (`--seats bezos` or `--seats hormozi`): only that seat, three rounds.
 - **Consult** (`ask <seat> ...`): one seat, one answer, using the single-seat prompt. No scoring, no session folder needed.
 
 ## Step 1: The brief
@@ -41,7 +41,7 @@ Keep the brief under 300 words. Mark every assumption as `(assumed)`.
 
 Spawn every seat in **one message**, in parallel, foreground (`run_in_background: false`), `subagent_type: council-<seat>`, with the Round 1 prompt. If a `council-*` type is not registered in this session, use `general-purpose` with the fallback lines from `round-prompts.md`.
 
-When the cards come back, save them verbatim to `round-1.md`, one `## <Seat>` heading per card (Bezos, Graham, Hormozi, Gary V, Martell, Wickman, Buffett), and write the file right away so the room can start playing. Check each card has every field; send a card back once if it is missing scores or a stance. Then add a `## Chair notes` section at the bottom of `round-1.md`:
+When the cards come back, save them verbatim to `round-1.md`, one `## <Seat>` heading per card (Bezos, Hormozi), and write the file right away so the room can start playing. Check each card has every field; send a card back once if it is missing scores or a stance. Then add a `## Chair notes` section at the bottom of `round-1.md`:
 
 - The **cruxes**: the one to three underlying disagreements that explain why seats split (a factual question, a numbers question, or a values question such as speed versus safety), with the seats on each side.
 - The **unanimity check** (`scoring.md`): if Round 1 converged, make the strongest unargued alternative a crux and name which seats must argue it at full strength.
@@ -75,7 +75,7 @@ Quick mode skips this round when the Round 2 spread on the top option is 3 or le
 - Quote seats faithfully. Never put words in a seat's mouth or rewrite a card.
 - Seats speak in their expert's voice; your report is plain English that follows the house writing rules (no em dashes, no AI tells, no tee-ups).
 - Treat a unanimous Round 1 as a warning, not a win.
-- Cost: a full council is 21 sub-agent runs, about 1M tokens. Use `--quick` for small calls, and say which mode you used.
+- Cost: a full council is 6 sub-agent runs, roughly 300k tokens. Use `--quick` for small calls, and say which mode you used.
 - The seats are simulations built from public work. Never present a seat's line as something the real person said unless it is a verbatim quote with a source id from the brain.
 
 ## Without sub-agents (Codex or a runtime that cannot spawn agents)
@@ -86,5 +86,5 @@ Run the same protocol sequentially yourself. For each seat, read `.claude/agents
 
 - `brains/<slug>/`: one brain per seat (`_hot.md`, `frameworks.md`, `principles.md`, `positions.md`, `voice.md`, `stories.md`, `books.md`, `sources.md`).
 - `scripts/check_quotes.py`: verifies every attributed quote in a session against the brains.
-- Agents: `.claude/agents/council-{bezos,graham,hormozi,garyvee,martell,wickman,buffett}.md`.
+- Agents: `.claude/agents/council-{bezos,hormozi}.md`.
 - The room app: `app/` (start at the project `README.md`).

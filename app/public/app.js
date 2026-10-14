@@ -142,9 +142,11 @@ function layoutStage() {
   const t = $("#table");
   Object.assign(t.style, { left: `${cx - rx}px`, top: `${cy - ry}px`, width: `${rx * 2}px`, height: `${ry * 2}px` });
   const edge = (x) => cy - ry * Math.sqrt(Math.max(0, 1 - ((x - cx) / rx) ** 2));
-  const xs = [0.085, 0.222, 0.361, 0.5, 0.639, 0.778, 0.915];
+  // seats spread evenly around the middle: up to seven fit the table edge, fewer sit wider apart
+  const n = state.seats.length;
+  const gap = n > 1 ? Math.min(0.3, 0.83 / (n - 1)) : 0;
   state.seats.forEach((s, i) => {
-    const x = W * xs[i];
+    const x = W * (0.5 + (i - (n - 1) / 2) * gap);
     const d = ((x - cx) / rx) ** 2;
     const size = H * (narrow ? 0.5 + 0.08 * d : 0.37 + 0.07 * d);
     const bottom = edge(x) + size * 0.2;
@@ -161,7 +163,8 @@ function layoutStage() {
   } else {
     stage.style.paddingTop = "";
     // the captions start below the lowest nameplate they could collide with
-    const inner = [1, 2, 3, 4, 5].map((i) => $(`#plate-${state.seats[i].key}`));
+    const innerSeats = state.seats.length > 2 ? state.seats.slice(1, -1) : state.seats;
+    const inner = innerSeats.map((s) => $(`#plate-${s.key}`));
     const top = Math.max(...inner.map((p) => p.offsetTop + p.offsetHeight / 2)) + H * 0.035;
     Object.assign(c.style, { left: `${W * 0.2}px`, width: `${W * 0.6}px`, top: `${top}px`, height: `${H - top - H * 0.09}px` });
   }

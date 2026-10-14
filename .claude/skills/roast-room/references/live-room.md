@@ -30,9 +30,9 @@ The room is optional. Write these files anyway; they cost a few lines and the co
   ],
   "weights": {
     "hormozi": { "weight": 3, "reason": "Pricing is his pillar" },
-    "buffett": { "weight": 2, "reason": "Cash risk of losing clients" }
+    "bezos": { "weight": 2, "reason": "Is the raise a one-way door with current clients" }
   },
-  "seats": ["bezos", "graham", "hormozi", "garyvee", "martell", "wickman", "buffett"],
+  "seats": ["bezos", "hormozi"],
   "brief": "Two or three sentences.",
   "assumptions": ["Close rate holds at 50% (assumed)"]
 }
@@ -48,8 +48,8 @@ The room is optional. Write these files anyway; they cost a few lines and the co
     {
       "question": "Is customer cash enough to fund the next two hires?",
       "sides": [
-        { "position": "Yes, prepay covers it", "seats": ["Hormozi", "Martell"] },
-        { "position": "No, prepay is pulled-forward revenue", "seats": ["Graham", "Bezos"] }
+        { "position": "Yes, prepay covers it", "seats": ["Hormozi"] },
+        { "position": "No, prepay is pulled-forward revenue", "seats": ["Bezos"] }
       ]
     }
   ],
@@ -82,14 +82,14 @@ One to three cruxes. Questions under 90 characters, positions under 50.
   "call": "One or two sentences the founder can act on, naming the option.",
   "recommended": "B",
   "why": [
-    { "point": "One line.", "seat": "Graham", "framework": "Startup = Growth" }
+    { "point": "One line.", "seat": "Hormozi", "framework": "Value Equation" }
   ],
-  "minority": { "seat": "Martell", "quote": "The seat's own words, copied from a card.", "would_have_to_be_true": "One line." },
+  "minority": { "seat": "Bezos", "quote": "The seat's own words, copied from a card.", "would_have_to_be_true": "One line." },
   "next_steps": [ { "when": "This week", "action": "One line." } ],
   "kill_criteria": "One line.",
   "conditions": ["Checkable condition"],
   "fights": [ { "crux": "The question", "story": "Who was on each side, who moved, how it resolved." } ],
-  "amendments": [ { "seat": "Buffett", "amendment": "One line.", "adopted": true, "reason": "One line." } ],
+  "amendments": [ { "seat": "Bezos", "amendment": "One line.", "adopted": true, "reason": "One line." } ],
   "cheapest_test": "One line.",
   "revisit": "When and with what numbers.",
   "override_note": ""
